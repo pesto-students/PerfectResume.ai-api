@@ -10,7 +10,7 @@ export class AuthController {
   @Post('login')
   async login(
     @Body() body: { username: string; password: string },
-  ): Promise<{ access_token: string }> {
+  ): Promise<any> {
     return this.authService.login(body);
   }
 
@@ -18,8 +18,6 @@ export class AuthController {
   @Post('signup')
   async signup(@Request() req: any): Promise<any> {
     const user = await this.authService.signup(req.body);
-    const token = this.authService.login(user);
-
-    return { accessToken: token, user };
+    return this.authService.login(user);
   }
 }

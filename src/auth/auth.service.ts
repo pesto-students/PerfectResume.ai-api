@@ -38,6 +38,9 @@ export class AuthService {
       username: user.username,
     });
 
-    return accessToken;
+    return {
+      accessToken,
+      userData: { username: user.username, emailID: user.emailID },
+    };
   }
 }
