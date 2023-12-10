@@ -52,7 +52,6 @@ export class UserAuthGuard implements CanActivate {
     if (!data) this.throwMissing();
 
     const parsed = this.parsedVal(data);
-
     try {
       if (parsed) {
         request.userData = parsed;
