@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Request } from '@nestjs/common';
+import { Controller, Post, Body, Request, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { isPublic } from '../decorator/public.decorator';
 
@@ -16,8 +16,10 @@ export class AuthController {
 
   @isPublic()
   @Post('signup')
-  async signup(@Request() req: any): Promise<{ access_token: string }> {
+  async signup(@Request() req: any): Promise<any> {
     const user = await this.authService.signup(req.body);
-    return this.authService.login(user);
+    const token = this.authService.login(user);
+
+    return { accessToken: token, user };
   }
 }
