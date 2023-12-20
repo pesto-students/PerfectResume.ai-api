@@ -10,6 +10,8 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 import { OpenAIModule } from './openai/openai.module';
 
 @Module({
+  controllers: [AppController],
+  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
   imports: [
     MongooseModule.forRoot(
       'mongodb+srv://perfectResumeAi:5AKmwxlDo1YSfaOr@testcluster.ctkpnw4.mongodb.net/?retryWrites=true&w=majority',
@@ -21,7 +23,5 @@ import { OpenAIModule } from './openai/openai.module';
     UsersModule,
     OpenAIModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
 })
 export class AppModule {}
