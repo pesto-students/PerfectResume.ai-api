@@ -9,6 +9,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 
 @Module({
+  controllers: [AppController],
+  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
   imports: [
     MongooseModule.forRoot(
       'mongodb+srv://perfectResumeAi:5AKmwxlDo1YSfaOr@testcluster.ctkpnw4.mongodb.net/?retryWrites=true&w=majority',
@@ -19,7 +21,5 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
     AuthModule,
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
 })
 export class AppModule {}
