@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
+import { TemplatesModule } from './templates/templates.module';
 
 @Module({
   controllers: [AppController],
@@ -20,6 +21,7 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
     }),
     AuthModule,
     UsersModule,
+    TemplatesModule,
   ],
 })
 export class AppModule {}
