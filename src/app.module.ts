@@ -21,6 +21,7 @@ import { OpenAIModule } from './openai/openai.module';
     }),
     AuthModule,
     UsersModule,
+    TemplatesModule,
     OpenAIModule,
   ],
 })
