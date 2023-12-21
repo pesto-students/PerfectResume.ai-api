@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
+import { OpenAIModule } from './openai/openai.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
     }),
     AuthModule,
     UsersModule,
+    OpenAIModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],

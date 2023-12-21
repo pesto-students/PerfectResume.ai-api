@@ -7,20 +7,20 @@ import { Users } from './users.schema';
 export class UsersQuery {
   constructor(@InjectModel('Users') private readonly userModel: Model<Users>) {}
 
-  async findAll(): Promise<Users[]> {
-    return this.userModel.find().exec();
+  async findAll(where: any): Promise<Users[]> {
+    return this.userModel.find(where).select('-password').exec();
   }
 
   async findOne(where: any): Promise<Users | null> {
-    return this.userModel.findOne(where).exec();
+    return this.userModel.findOne(where).select('-password').exec();
   }
 
   async findByUsername(username: string): Promise<Users | null> {
-    return this.userModel.findOne({ username }).exec();
+    return this.userModel.findOne({ username }).select('-password').exec();
   }
 
   async findById(id: string): Promise<Users | null> {
-    return this.userModel.findById(id).exec();
+    return this.userModel.findById(id).select('-password').exec();
   }
 
   async createUser(user: Users): Promise<Users> {

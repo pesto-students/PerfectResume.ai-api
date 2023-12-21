@@ -1,6 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';
-import { UsersQuery } from '../users/users.query';
+import { UsersQuery } from '../users/entity/users.query';
 import { JwtService } from './helpers/jwt.helper';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -10,26 +11,27 @@ export class AuthService {
   ) {}
 
   async signup(user: any): Promise<any> {
-    const existingUser = await this.usersQuery.findByUsername(user.username);
-
+    console.log(user);
+    const existingUser = await this.usersQuery.findOne({
+      email: user.email,
+    });
     if (existingUser) {
-      throw new ConflictException('Username already exists');
+      throw new ConflictException('User with emailID already exists');
     }
-
+    user.username =
+      user.email.slice(0, 4) + '_' + randomBytes(5).toString('hex').slice(0, 5);
     const newUser = await this.usersQuery.createUser(user);
-    const { username, emailID } = newUser;
-
-    return { username, emailID };
+    return newUser;
   }
 
   async login(userInfo: any): Promise<any> {
     // match if user exits and password match
     const user = await this.usersQuery.findOne({
-      username: userInfo.username,
+      email: userInfo.email,
       password: userInfo.password,
     });
     if (!user) {
-      throw new ConflictException('Incorrect Password or UserName');
+      throw new ConflictException('Incorrect Password or EmailID');
     }
 
     // return accessToken
@@ -40,7 +42,7 @@ export class AuthService {
 
     return {
       accessToken,
-      userData: { username: user.username, emailID: user.emailID },
+      userData: { id: user.id, username: user.username, email: user.email },
     };
   }
 }
