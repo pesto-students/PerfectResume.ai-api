@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UsersQuery } from './users.query';
+import { UsersQuery } from './entity/users.query';
 
 @Injectable()
 export class UsersService {
   @Inject()
   private readonly usersQuery: UsersQuery;
 
-  getUsers() {
-    return this.usersQuery.findAll();
+  getUserInfo(_id: string) {
+    return this.usersQuery.findOne({ _id });
   }
 }
