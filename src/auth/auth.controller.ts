@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Request, Response, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { isPublic } from '../decorator/public.decorator';
-import { UserLoginDTO } from './dto/auth.dto';
+import { UserLoginDTO, UserSignupDTO } from './dto/auth.dto';
 
 // poc: generate html to pdf
 // poc: integrate openapi/chatgpt
@@ -23,7 +23,7 @@ export class AuthController {
   @isPublic()
   @Post('signup')
   async signup(
-    @Body() userData: UserLoginDTO,
+    @Body() userData: UserSignupDTO,
     @Response({ passthrough: true }) res: any,
   ): Promise<any> {
     const newUser = await this.authService.signup(userData);
