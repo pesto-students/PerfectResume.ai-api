@@ -8,8 +8,11 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 import { OpenAIModule } from './openai/openai.module';
+import { TemplatesModule } from './templates/templates.module';
 
 @Module({
+  controllers: [AppController],
+  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
   imports: [
     MongooseModule.forRoot(
       'mongodb+srv://perfectResumeAi:5AKmwxlDo1YSfaOr@testcluster.ctkpnw4.mongodb.net/?retryWrites=true&w=majority',
@@ -19,9 +22,8 @@ import { OpenAIModule } from './openai/openai.module';
     }),
     AuthModule,
     UsersModule,
+    TemplatesModule,
     OpenAIModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
 })
 export class AppModule {}
