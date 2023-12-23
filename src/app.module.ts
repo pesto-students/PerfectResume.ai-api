@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 import { OpenAIModule } from './openai/openai.module';
 import { TemplatesModule } from './templates/templates.module';
+import { ResumesModule } from './resumes/resumes.module';
 
 @Module({
   controllers: [AppController],
@@ -24,6 +25,7 @@ import { TemplatesModule } from './templates/templates.module';
     UsersModule,
     TemplatesModule,
     OpenAIModule,
+    ResumesModule,
   ],
 })
 export class AppModule {}
