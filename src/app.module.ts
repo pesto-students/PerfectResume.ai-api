@@ -10,6 +10,7 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 import { OpenAIModule } from './openai/openai.module';
 import { TemplatesModule } from './templates/templates.module';
 import { ResumesModule } from './resumes/resumes.module';
+import { TemplateModule } from './template/template.module';
 
 @Module({
   controllers: [AppController],
@@ -26,6 +27,7 @@ import { ResumesModule } from './resumes/resumes.module';
     TemplatesModule,
     OpenAIModule,
     ResumesModule,
+    TemplateModule,
   ],
 })
 export class AppModule {}

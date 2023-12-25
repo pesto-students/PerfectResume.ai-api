@@ -26,10 +26,7 @@ export class AuthService {
 
   async login(userInfo: any): Promise<any> {
     // match if user exits and password match
-    const user = await this.usersQuery.findOne({
-      email: userInfo.email,
-      password: userInfo.password,
-    });
+    const user = await this.usersQuery.validateUser(userInfo);
     if (!user) {
       throw new ConflictException('Incorrect Password or EmailID');
     }
