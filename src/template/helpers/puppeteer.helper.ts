@@ -172,6 +172,5 @@ export class PuppeteerHelper {
     // const mergedTemplate = await this.createHTMLFromJSON(tempate, metaData);
     // convert html to pdf
     this.generatePDF(tempate, '');
-    
   }
 }
