@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { LoginUser, Users } from './users.schema';

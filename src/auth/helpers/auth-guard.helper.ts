@@ -34,11 +34,11 @@ export class UserAuthGuard implements CanActivate {
     const headers = request.headers;
 
     // check if Public
-    const isPublic = this.reflector.get<boolean>(
-      'isPublic',
+    const IsPublic = this.reflector.get<boolean>(
+      'IsPublic',
       context.getHandler(),
     );
-    if (isPublic) return true;
+    if (IsPublic) return true;
 
     if (!headers.authorization) this.throwBasicAuth();
 
