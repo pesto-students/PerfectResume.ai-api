@@ -16,8 +16,10 @@ export class TemplatesService {
     return createdTemplate.save();
   }
 
-  async update(updateTemplateDto: UpdateTemplateDto): Promise<Template> {
-    const id = updateTemplateDto.id;
+  async update(
+    id: string,
+    updateTemplateDto: UpdateTemplateDto,
+  ): Promise<Template> {
     if (!isValidObjectId(id)) {
       throw new NotFoundException(`Invalid ID format: ${id}`);
     }

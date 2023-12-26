@@ -34,6 +34,11 @@ export class Resume {
   })
   isPrivate: boolean;
 
+  @Prop({
+    required: [true, 'Thumbnail url is missing'],
+  })
+  thumbnail: string;
+
   @Prop({ type: Types.ObjectId, ref: Template.name })
   templateId: Types.ObjectId;
 

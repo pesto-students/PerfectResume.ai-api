@@ -51,6 +51,12 @@ export class ResumesService {
     }
     return resume;
   }
+  async findByUserId(userID: string): Promise<Resume[]> {
+    if (!isValidObjectId(userID)) {
+      throw new NotFoundException(`Invalid ID format: ${userID}`);
+    }
+    return this.resumeModel.find({ userId: userID }).exec();
+  }
 
   async findAll(userId: string): Promise<Resume[]> {
     return this.resumeModel.find({ userId }).exec();

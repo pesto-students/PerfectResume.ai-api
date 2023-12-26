@@ -7,4 +7,9 @@ export class CreateResumeDto extends ResumeDto {
   @IsString()
   @IsNotEmpty({ message: 'User Id is missing' })
   userId: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty({ message: 'thumbnail url is missing' })
+  thumbnail: string;
 }

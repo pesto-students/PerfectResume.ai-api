@@ -29,6 +29,16 @@ export class Template {
   metaData: object;
 
   @Prop({
+    default: true,
+  })
+  isActive: boolean;
+
+  @Prop({
+    required: [true, 'Thumbnail url is missing'],
+  })
+  thumbnail: string;
+
+  @Prop({
     type: Object,
     required: [true, 'Form Schema is missing'],
   })
