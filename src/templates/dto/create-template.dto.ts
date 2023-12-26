@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateTemplateDto {
   @ApiProperty()
@@ -13,6 +19,11 @@ export class CreateTemplateDto {
   metaData: object;
 
   @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  isActive: boolean;
+
+  @ApiProperty()
   @IsObject()
   @IsNotEmpty({ message: 'Form Schema should not be empty' })
   formSchema: object;
@@ -21,4 +32,9 @@ export class CreateTemplateDto {
   @IsObject()
   @IsNotEmpty({ message: 'Template should not be empty' })
   template: object;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty({ message: 'thumbnail url is missing' })
+  thumbnail: string;
 }

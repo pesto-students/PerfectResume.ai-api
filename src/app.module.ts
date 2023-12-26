@@ -10,6 +10,7 @@ import { UserAuthGuard } from './auth/helpers/auth-guard.helper';
 import { OpenAIModule } from './openai/openai.module';
 import { TemplatesModule } from './templates/templates.module';
 import { ResumesModule } from './resumes/resumes.module';
+import { UploadModule } from './upload/upload.module';
 import { TemplateModule } from './template/template.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { TemplateModule } from './template/template.module';
     TemplatesModule,
     OpenAIModule,
     ResumesModule,
+    UploadModule,
     TemplateModule,
   ],
 })
