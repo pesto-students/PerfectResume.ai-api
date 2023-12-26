@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Request, Response, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { isPublic } from '../decorator/public.decorator';
+import { IsPublic } from '../decorator/public.decorator';
 import { UserLoginDTO, UserSignupDTO } from './dto/auth.dto';
 
 // poc: generate html to pdf
@@ -9,7 +9,7 @@ import { UserLoginDTO, UserSignupDTO } from './dto/auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @isPublic()
+  @IsPublic()
   @Post('login')
   async login(
     @Body() userData: UserLoginDTO,
@@ -20,20 +20,20 @@ export class AuthController {
     return userDetails;
   }
 
-  @isPublic()
+  @IsPublic()
   @Post('signup')
   async signup(
     @Body() userData: UserSignupDTO,
     @Response({ passthrough: true }) res: any,
   ): Promise<any> {
-    const newUser = await this.authService.signup(userData);
-    const userDetails = await this.authService.login(newUser);
+    await this.authService.signup(userData);
+    const userDetails = await this.authService.login(userData);
 
     res.cookie('accessToken', userDetails.accessToken);
     return userDetails;
   }
 
-  @isPublic()
+  @IsPublic()
   @Post('logout')
   async logout(
     @Request() req: any,

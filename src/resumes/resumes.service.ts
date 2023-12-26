@@ -1,5 +1,9 @@
 import { CreateResumeDto } from './dto/create-resume.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { Resume } from './schemas/resume.schema';
 import { Model, isValidObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,6 +14,15 @@ export class ResumesService {
   constructor(@InjectModel(Resume.name) private resumeModel: Model<Resume>) {}
 
   async create(createResumeDto: CreateResumeDto): Promise<Resume> {
+    const isResumeWithNameAlreadyExists = await this.resumeModel.findOne({
+      name: createResumeDto.name,
+      userId: createResumeDto.userId,
+    });
+    if (isResumeWithNameAlreadyExists) {
+      throw new UnprocessableEntityException(
+        'Resume with same name already exits!!',
+      );
+    }
     const createdResume = new this.resumeModel(createResumeDto);
     return createdResume.save();
   }
@@ -39,7 +52,7 @@ export class ResumesService {
     return resume;
   }
 
-  async findAll(): Promise<Resume[]> {
-    return this.resumeModel.find().exec();
+  async findAll(userId: string): Promise<Resume[]> {
+    return this.resumeModel.find({ userId }).exec();
   }
 }

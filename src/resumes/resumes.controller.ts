@@ -32,7 +32,7 @@ export class ResumesController {
   }
 
   @Get()
-  findAll(): Promise<any> {
-    return this.resumesService.findAll();
+  findAll(@UserData('userID') userID: string): Promise<any> {
+    return this.resumesService.findAll(userID);
   }
 }
