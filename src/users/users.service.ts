@@ -7,6 +7,6 @@ export class UsersService {
   private readonly usersQuery: UsersQuery;
 
   getUserInfo(_id: string) {
-    return this.usersQuery.findOne({ _id });
+    return this.usersQuery.findById(_id);
   }
 }
