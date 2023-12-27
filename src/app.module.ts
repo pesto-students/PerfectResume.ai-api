@@ -12,6 +12,7 @@ import { TemplatesModule } from './templates/templates.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { UploadModule } from './upload/upload.module';
 import { TemplateModule } from './template/template.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   controllers: [AppController],
@@ -30,6 +31,7 @@ import { TemplateModule } from './template/template.module';
     ResumesModule,
     UploadModule,
     TemplateModule,
+    MailModule,
   ],
 })
 export class AppModule {}

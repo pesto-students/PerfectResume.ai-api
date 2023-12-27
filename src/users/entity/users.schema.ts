@@ -20,6 +20,8 @@ export const Users = new Schema(
       enum: ['NORMAL', 'MEMBER'],
       default: 'NORMAL',
     },
+    forgotPasswordToken: String,
+    forgotPasswordExpiry: Number,
   },
   {
     timestamps: true,
@@ -31,6 +33,8 @@ export interface Users extends Document {
   email: string;
   userType: string;
   password: string;
+  forgotPasswordToken: string;
+  forgotPasswordExpiry: number;
 }
 
 export interface LoginUser {

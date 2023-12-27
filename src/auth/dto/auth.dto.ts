@@ -8,12 +8,16 @@ export class UserLoginDTO {
   email: string;
 
   @IsString({ message: 'Password must be a string' })
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
   @IsNotEmpty({ message: 'Password is required' })
   password: string;
 }
 
 export class UserSignupDTO extends UserLoginDTO {
+  @IsString({ message: 'Password must be a string' })
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  password: string;
+
   @Transform((obj) => {
     if (obj && typeof obj.value === 'boolean') {
       return obj.value ? 'MEMBER' : 'NORMAL';

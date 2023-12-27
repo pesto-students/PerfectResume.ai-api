@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Request, Response, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Request,
+  Response,
+  Res,
+  Param,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { IsPublic } from '../decorator/public.decorator';
 import { UserLoginDTO, UserSignupDTO } from './dto/auth.dto';
@@ -43,5 +51,22 @@ export class AuthController {
     return {
       logout: 'success',
     };
+  }
+
+  @IsPublic()
+  @Post('forgotPassword')
+  async forgotPassword(@Body() { email }: { email: string }): Promise<any> {
+    const response = await this.authService.forgotPassword(email);
+    return response;
+  }
+
+  @IsPublic()
+  @Post('resetPassword/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body() { password }: { password: string },
+  ): Promise<any> {
+    const response = await this.authService.resetPassword(token, password);
+    return response;
   }
 }
