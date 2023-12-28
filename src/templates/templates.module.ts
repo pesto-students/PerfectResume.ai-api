@@ -14,5 +14,6 @@ import { UploadModule } from 'src/upload/upload.module';
   ],
   controllers: [TemplatesController],
   providers: [TemplatesService],
+  exports: [TemplatesService],
 })
 export class TemplatesModule {}

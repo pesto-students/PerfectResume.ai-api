@@ -13,11 +13,16 @@ import { ResumesModule } from './resumes/resumes.module';
 import { UploadModule } from './upload/upload.module';
 import { TemplateModule } from './template/template.module';
 import { MailModule } from './mail/mail.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: UserAuthGuard }],
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     MongooseModule.forRoot(
       'mongodb+srv://perfectResumeAi:5AKmwxlDo1YSfaOr@testcluster.ctkpnw4.mongodb.net/?retryWrites=true&w=majority',
     ),
