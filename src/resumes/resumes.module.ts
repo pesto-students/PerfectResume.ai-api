@@ -12,5 +12,6 @@ import { UploadModule } from 'src/upload/upload.module';
   ],
   controllers: [ResumesController],
   providers: [ResumesService],
+  exports: [ResumesService],
 })
 export class ResumesModule {}
