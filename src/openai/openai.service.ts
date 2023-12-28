@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OpenAI } from 'openai';
+import { PromptWithConfigInfoDTO } from './dto/openai.dto';
 
 @Injectable()
 export class OpenAIService {
@@ -7,32 +8,43 @@ export class OpenAIService {
   constructor() {
     this.openai = new OpenAI({
       apiKey: process.env['OPENAI_API_KEY'],
+      dangerouslyAllowBrowser: true,
     });
   }
-  async get() {
+  async getPromptWithRespectToConfigInfo(data: PromptWithConfigInfoDTO) {
+    const { config, text } = data;
+    const schema = {
+      type: 'object',
+      overview: {
+        type: 'array',
+        description: 'Give 5 different version of the same text',
+        items: {
+          type: 'object',
+          properties: {
+            item: {
+              type: 'string',
+              description: 'reframe sentence'
+            }
+          }
+        }
+      }
+    };
     const chatCompletion = await this.openai.chat.completions.create({
       messages: [
         {
+          role: 'system',
+          content: `You are a helpful resume reviewer who helps 
+        people to correct and align their resume toward the job they are applying for`,
+        },
+        {
           role: 'user',
-          content: `reframe this sentense in 5 different ways. \n
-      build an integrated chat system result in product revenuce increase by 80 percent. \n
-      return in valid JSON array format only`,
+          content: `${config}\n Based on above information of job description of a company, 
+          give the 5 different version of the below sentence which aligns with job description
+           provided above and also keeps the sentence initial meaning.\n ${text}`,
         },
       ],
       model: 'gpt-3.5-turbo',
-      functions: [
-        {
-          name: 'getName',
-          parameters: {
-            type: 'object',
-            properties: {},
-          },
-        },
-      ],
-      function_call: { name: 'getName' },
     });
-    console.log(chatCompletion.choices[0].message);
-    JSON.parse(chatCompletion.choices[0].message.content);
-    return chatCompletion;
+    return chatCompletion.choices[0].message.content;
   }
 }
