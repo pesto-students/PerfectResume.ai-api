@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { validator } from '@exodus/schemasafe';
+import { ajvValidator } from './validator.helper';
 import { JSDOM } from 'jsdom';
 import { isObject } from 'src/generic/utils';
 import puppeteer from 'puppeteer';
@@ -7,6 +7,9 @@ import puppeteer from 'puppeteer';
 @Injectable()
 export class PuppeteerHelper {
   browser;
+  private dom = new JSDOM();
+  private document = this.dom.window.document;
+
   constructor() {}
 
   private async getBrowserInstance() {
@@ -25,7 +28,7 @@ export class PuppeteerHelper {
   }
 
   private validateData(schema, data) {
-    const validate = validator({
+    const validate = ajvValidator({
       ...schema,
     });
     return validate(data);
@@ -77,11 +80,7 @@ export class PuppeteerHelper {
 
     // Handle element nodes
     if (json.type === 'element') {
-      // if (json.data && !validateData(json.data.schema, data)) {
-      //   return false;
-      // }
-      const dom = new JSDOM();
-      element = dom.window.document.createElement(json.tagName);
+      element = this.document.createElement(json.tagName);
 
       // Set attributes
       if (json.attributes) {
@@ -130,11 +129,15 @@ export class PuppeteerHelper {
     // Handle text nodes
     else if (json.type === 'text') {
       const content = this.replacePlaceholders(json.content, data);
-      const dom = new JSDOM();
-      element = dom.window.document.createTextNode(content);
+      element = this.document.createTextNode(content);
     }
 
     return element;
+  }
+
+  serializeHtml(rootElement: HTMLElement): string {
+    // Use jsdom's serialize method to convert the document to HTML string
+    return rootElement.outerHTML;
   }
 
   async generatePDF(htmlContent, cssContent) {
@@ -168,9 +171,11 @@ export class PuppeteerHelper {
 
   async build(tempate: any, metaData: any) {
     // merge template with metaData
-    // convert mergedTemplate with metaData
-    // const mergedTemplate = await this.createHTMLFromJSON(tempate, metaData);
+    const mergedTemplate = await this.createHTMLFromJSON(tempate, metaData);
+    const htmlString = this.serializeHtml(mergedTemplate);
+    console.log('htmlString: ', htmlString);
+
     // convert html to pdf
-    this.generatePDF(tempate, '');
+    // this.generatePDF(tempate, '');
   }
 }
