@@ -19,7 +19,8 @@ export class PuppeteerHelper {
   private async getBrowserInstance() {
     // if (!this.browser) {
     const options = {
-      headless: true,
+      executablePath: `/usr/bin/google-chrome`,
+      headless: 'new',
       args: [
         '--disable-extensions',
         '--disable-dev-shm-usage',
