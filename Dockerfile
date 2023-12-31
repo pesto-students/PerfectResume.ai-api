@@ -6,12 +6,12 @@ WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to /app
 COPY package*.json ./
+COPY *.env ./
 
 # Install any needed packages specified in package.json
 RUN npm install && npx puppeteer browsers install chrome
 
 COPY . .
-COPY .env ./
 
 ENV NODE_ENV=production
 
