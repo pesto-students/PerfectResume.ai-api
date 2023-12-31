@@ -20,7 +20,7 @@ export class PuppeteerHelper {
     // if (!this.browser) {
     const options = {
       executablePath: `/usr/bin/google-chrome`,
-      headless: 'new',
+      headless: true,
       args: [
         '--disable-extensions',
         '--disable-dev-shm-usage',
