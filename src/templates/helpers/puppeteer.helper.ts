@@ -64,8 +64,8 @@ export class PuppeteerHelper {
       printBackground: true,
     });
 
-    // await page.close();
-    // await this.browser.close();
+    await page.close();
+    await this.browser.close();
     return pdf;
   }
 }
