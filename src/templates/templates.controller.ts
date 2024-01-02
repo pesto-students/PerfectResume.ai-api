@@ -1,10 +1,12 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   Post,
   Put,
   Req,
+  Res,
   UseInterceptors,
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
@@ -68,5 +70,23 @@ export class TemplatesController {
   @Get()
   findAll(): Promise<any> {
     return this.templatesService.findAll();
+  }
+
+  @Post('generate-pdf/:resumeID?')
+  async generateResumePdf(
+    @Param('resumeID') resumeID: string,
+    @Body() resumeData: any,
+    @Res() res: any,
+  ): Promise<any> {
+    const pdfBuffer = await this.templatesService.generateResumePdf({
+      resumeID,
+      resumeData,
+    });
+    // Set the correct headers to indicate content type and disposition (as an attachment)
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
+
+    // Send the PDF buffer
+    res.send(pdfBuffer);
   }
 }

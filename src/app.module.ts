@@ -11,7 +11,6 @@ import { OpenAIModule } from './openai/openai.module';
 import { TemplatesModule } from './templates/templates.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { UploadModule } from './upload/upload.module';
-import { TemplateModule } from './template/template.module';
 import { MailModule } from './mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -35,7 +34,6 @@ import { join } from 'path';
     OpenAIModule,
     ResumesModule,
     UploadModule,
-    TemplateModule,
     MailModule,
   ],
 })

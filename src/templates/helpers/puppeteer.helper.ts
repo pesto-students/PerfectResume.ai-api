@@ -19,7 +19,7 @@ export class PuppeteerHelper {
   private async getBrowserInstance() {
     // if (!this.browser) {
     const options = {
-      headless: true,
+      headless: false,
       args: [
         '--disable-extensions',
         '--disable-dev-shm-usage',
@@ -27,6 +27,7 @@ export class PuppeteerHelper {
         '--disable-setuid-sandbox',
         '--disable-web-security',
       ],
+      ignoreHTTPSErrors: true,
     };
     this.browser = await puppeteer.launch(options);
     // }
@@ -58,14 +59,14 @@ export class PuppeteerHelper {
     await page.addStyleTag({
       content: this.cssContent,
     });
-
+    await page.emulateMediaType('screen');
     const pdf = await page.pdf({
       format: 'A4',
       printBackground: true,
     });
 
-    await page.close();
-    await this.browser.close();
+    // await page.close();
+    // await this.browser.close();
     return pdf;
   }
 }
