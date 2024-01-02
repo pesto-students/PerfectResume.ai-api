@@ -1,8 +1,6 @@
-import {
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { UnprocessableEntityException } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsString, Length, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class PromptWithConfigInfoDTO {
   @Transform((obj) => {
@@ -36,22 +34,4 @@ export class PromptWithConfigInfoDTO {
     message: 'Config must be between 10 and 50000 characters long',
   })
   config: string;
-
-  @Transform((obj) => {
-    if (typeof obj.value === 'string') {
-      const sentence = obj.value.trim();
-      if (sentence.length > 0) {
-        return sentence;
-      }
-      throw new UnprocessableEntityException('Please Pass a Valid Prompt');
-    }
-    throw new UnprocessableEntityException('Expected Prompt to be a String');
-  })
-  @IsString()
-  @IsNotEmpty()
-  @Length(1, 255, {
-    message: 'Prompt must be between 1 and 255 characters long',
-  })
-  @IsOptional()
-  prompt: string;
 }
