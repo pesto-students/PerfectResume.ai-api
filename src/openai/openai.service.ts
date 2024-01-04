@@ -15,20 +15,29 @@ export class OpenAIService {
     // prettier-ignore
     const schema = {
       type: 'object',
-      required: ["versions", "items"],
+      required: ["versions", "items", "system", "text"],
       properties: {
         versions: {
           type: "array",
           description: "Generate 3 different versions of the context",
           items: {
-            type: "string"
+            type: "object",
+            properties: {
+              system:{
+                type:  "boolean",
+                enum: [true],
+                default: true
+              },
+              text: {
+                type: "string"
+              }
+            }
           }
         }
       }
     };
 
-    const prompt = `${config}\n. Based on above information of job description of a company, 
-      give  different version of the below sentence which aligns with job description.\n ${text}`;
+    const prompt = `${config.jobDescription}\n. Based on above information of job description of a company, give  different version of the below sentence which aligns with job description.\n ${text}`;
 
     const chatCompletion = await this.openai.chat.completions.create({
       messages: [

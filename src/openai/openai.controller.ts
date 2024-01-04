@@ -10,7 +10,7 @@ export class OpenAIController {
   @IsPublic()
   @Post('prompt')
   async getPromptWithRespectToConfigInfo(
-    @Body() body: PromptWithConfigInfoDTO
+    @Body() body: PromptWithConfigInfoDTO,
   ): Promise<any> {
     return this.openAIService.getPromptWithRespectToConfigInfo(body);
   }
