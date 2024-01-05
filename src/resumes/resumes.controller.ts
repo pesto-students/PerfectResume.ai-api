@@ -13,7 +13,7 @@ import { UserData } from 'src/decorator/request.decorator';
 import { ResumeDto } from './dto/resume.dto';
 import { UpdateResumeDto } from './dto/update-resume.dto';
 import { UploadService } from 'src/upload/upload.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('resumes')
 export class ResumesController {
@@ -23,16 +23,14 @@ export class ResumesController {
   ) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FileInterceptor('image'))
   async create(@UserData('userID') userID: string, @Req() req) {
     // Accessing files from the request
     let url = null;
-    const files: Express.Multer.File[] = req.files;
-    if (files && files.length) {
-      const fileResponse = await this.uploadService.uploadFiles(files);
-      if (fileResponse[0].data) {
-        url = fileResponse[0].data.url;
-      }
+    const file: Express.Multer.File = req.file;
+    if (file) {
+      const response = await this.uploadService.uploadToS3(file);
+      url = response.url;
     }
     url = url ? url : '';
     const data = JSON.parse(req.body.data);
@@ -46,16 +44,14 @@ export class ResumesController {
   }
 
   @Put(':id')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FileInterceptor('image'))
   async update(@Param('id') id: string, @Req() req): Promise<any> {
     // Accessing files from the request
     let url = null;
-    const files: Express.Multer.File[] = req.files;
-    if (files && files.length) {
-      const fileResponse = await this.uploadService.uploadFiles(files);
-      if (fileResponse[0].data) {
-        url = fileResponse[0].data.url;
-      }
+    const file: Express.Multer.File = req.file;
+    if (file) {
+      const response = await this.uploadService.uploadToS3(file);
+      url = response.url;
     }
 
     const data = JSON.parse(req.body.data);

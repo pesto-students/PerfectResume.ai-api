@@ -13,7 +13,7 @@ import { TemplatesService } from './templates.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
 import { UploadService } from 'src/upload/upload.service';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('templates')
 export class TemplatesController {
@@ -23,16 +23,14 @@ export class TemplatesController {
   ) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FileInterceptor('image'))
   async create(@Req() req): Promise<any> {
     // Accessing files from the request
     let url = null;
-    const files: Express.Multer.File[] = req.files;
-    if (files && files.length) {
-      const fileResponse = await this.uploadService.uploadFiles(files);
-      if (fileResponse[0].data) {
-        url = fileResponse[0].data.url;
-      }
+    const file: Express.Multer.File = req.file;
+    if (file) {
+      const response = await this.uploadService.uploadToS3(file);
+      url = response.url;
     }
     url = url ? url : '';
     const data = JSON.parse(req.body.data);
@@ -42,16 +40,14 @@ export class TemplatesController {
   }
 
   @Put(':id')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FileInterceptor('image'))
   async update(@Param('id') id: string, @Req() req): Promise<any> {
     // Accessing files from the request
     let url = null;
-    const files: Express.Multer.File[] = req.files;
-    if (files && files.length) {
-      const fileResponse = await this.uploadService.uploadFiles(files);
-      if (fileResponse[0].data) {
-        url = fileResponse[0].data.url;
-      }
+    const file: Express.Multer.File = req.file;
+    if (file) {
+      const response = await this.uploadService.uploadToS3(file);
+      url = response.url;
     }
 
     const data = JSON.parse(req.body.data);

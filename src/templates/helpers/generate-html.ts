@@ -74,6 +74,15 @@ export class GenerateHtml {
         element.style.cssText = json.inlineStyle;
       }
 
+      if (
+        json.tagName === 'img' &&
+        json.className &&
+        json.className.includes('upload-image-in-resume')
+      ) {
+        const imageSrc = this.replacePlaceholders(json.src, data);
+        element.setAttribute('src', imageSrc);
+      }
+
       // Process children
       if (json.children) {
         json.children.forEach((childJson) => {
