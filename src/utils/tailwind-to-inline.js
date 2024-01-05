@@ -27,10 +27,8 @@ const { twi } = tailwindToCSS({
 function convertTailwindToInlineStyle(json) {
   // Handle element nodes
   if (json.type === 'element' || json.type === 'block') {
-    console.log(json.type);
     // Set class names
     if (json.className) {
-      console.log(json.type);
       // Convert classes to inline CSS
       const styleInline = twi(json.className);
       json.inlineStyle = styleInline;
