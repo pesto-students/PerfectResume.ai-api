@@ -7,10 +7,14 @@ import {
 import { Injectable, Inject } from '@nestjs/common';
 import { UTApi } from 'uploadthing/server';
 import { UTAPI_PROVIDER } from '../uploadthing/uploadthing';
+import { S3Service } from 'src/uploadthing/s3Service';
 
 @Injectable()
 export class UploadService {
-  constructor(@Inject(UTAPI_PROVIDER) private utapi: UTApi) {}
+  constructor(
+    @Inject(UTAPI_PROVIDER) private utapi: UTApi,
+    private readonly s3Service: S3Service,
+  ) {}
 
   async uploadFiles(
     files: Express.Multer.File[],
@@ -22,6 +26,11 @@ export class UploadService {
 
     // Now pass the transformed files to utapi.uploadFiles
     const response = await this.utapi.uploadFiles(transformedFiles);
+    return response;
+  }
+
+  async uploadToS3(file: Express.Multer.File): Promise<{ url: string }> {
+    const response = await this.s3Service.uploadToS3(file);
     return response;
   }
 

@@ -16,9 +16,15 @@ export class UserAuthGuard implements CanActivate {
       'Execpected Authorization type to be Bearer Auth',
     );
   }
+  private throwInvalidSession() {
+    throw new UnauthorizedException('Invalid Session');
+  }
 
+  private throwSessionExpired() {
+    throw new UnauthorizedException('Session Expired');
+  }
   private throwMissing() {
-    throw new UnauthorizedException('Exected a JWT Token');
+    throw new UnauthorizedException('Session Expired');
   }
 
   private parsedVal(data: any) {
@@ -40,27 +46,26 @@ export class UserAuthGuard implements CanActivate {
     );
     if (IsPublic) return true;
 
-    if (!headers.authorization) this.throwBasicAuth();
+    if (!headers.authorization) this.throwInvalidSession();
 
     const [type, jwt] = headers.authorization.split(' ');
-    if (type !== 'Bearer' || !jwt) this.throwBasicAuth();
+    if (type !== 'Bearer' || !jwt) this.throwInvalidSession();
 
-    // verify token
-    const decode = verify(jwt, process.env.JWT_SECRET_TOKEN);
-    if (!decode) throw new UnauthorizedException('Invalid Token');
-    const [_, data] = jwt.split('.');
-    if (!data) this.throwMissing();
-
-    const parsed = this.parsedVal(data);
     try {
+      // verify token
+      const decode = verify(jwt, process.env.JWT_SECRET_TOKEN);
+      if (!decode) this.throwInvalidSession();
+      const [_, data] = jwt.split('.');
+      if (!data) this.throwSessionExpired();
+      const parsed = this.parsedVal(data);
       if (parsed) {
         request.userData = parsed;
         return true;
       } else {
         throw new Error();
       }
-    } catch (err) {
-      this.throwBasicAuth();
+    } catch (error) {
+      this.throwSessionExpired();
     }
   }
 }

@@ -4,25 +4,28 @@ import { Readable } from 'stream';
 export class S3Service {
   private readonly s3Client: S3Client;
   constructor() {
-    this.s3Client = new S3Client({ region: 'your-aws-region' });
+    this.s3Client = new S3Client({
+      region: process.env.AWS_S3_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
   }
 
-  async uploadToS3(
-    bucketName: string,
-    key: string,
-    body: Buffer,
-  ): Promise<string> {
+  async uploadToS3(file: Express.Multer.File): Promise<{ url: string }> {
+    const bucketName = process.env.AWS_BUCKET_NAME;
     const params = {
       Bucket: bucketName,
-      Key: key,
-      Body: body,
+      Key: file.originalname,
+      Body: file.buffer,
     };
 
     const command = new PutObjectCommand(params);
 
     try {
       await this.s3Client.send(command);
-      return `https://${bucketName}.s3.amazonaws.com/${key}`;
+      return { url: `https://${bucketName}.s3.amazonaws.com/${params.Key}` };
     } catch (error) {
       console.error('Error uploading to S3:', error);
       throw new Error('Failed to upload to S3');
