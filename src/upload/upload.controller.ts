@@ -15,11 +15,11 @@ import { S3Service } from 'src/uploadthing/s3Service';
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-  @Post()
-  @UseInterceptors(FilesInterceptor('files'))
-  async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
-    return this.uploadService.uploadFiles(files);
-  }
+  // @Post()
+  // @UseInterceptors(FilesInterceptor('files'))
+  // async uploadFiles(@UploadedFiles() files: Express.Multer.File[]) {
+  //   return this.uploadService.uploadFiles(files);
+  // }
 
   @Post('delete')
   async deleteFiles(@Body() fileKeys: string[]): Promise<DeleteFilesResponse> {
@@ -34,7 +34,7 @@ export class UploadController {
   @Post()
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const bucketName = 'your-s3-bucket-name';
+    const bucketName = 'perfecresume-backend';
 
     try {
       const s3Service = new S3Service();

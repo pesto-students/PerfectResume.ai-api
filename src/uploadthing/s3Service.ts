@@ -4,7 +4,14 @@ import { Readable } from 'stream';
 export class S3Service {
   private readonly s3Client: S3Client;
   constructor() {
-    this.s3Client = new S3Client({ region: 'your-aws-region' });
+    console.log(process.env.AWS_S3_REGION);
+    this.s3Client = new S3Client({
+      region: process.env.AWS_S3_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
   }
 
   async uploadToS3(
