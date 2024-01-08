@@ -59,7 +59,7 @@ export class TemplatesService {
     return this.templateModel.find().exec();
   }
 
-  async generateResumePdf({ resumeID, resumeData }: GeneratePdfDto) {
+  async generateResumePdf({ userId, resumeID, resumeData }: GeneratePdfDto) {
     if (
       !(resumeID || (resumeData && resumeData.template && resumeData.metaData))
     ) {
@@ -70,8 +70,10 @@ export class TemplatesService {
     let userMetaData = {};
     let templateData = {};
     if (resumeID) {
-      const { metaData, templateId } =
-        await this.resumesService.findById(resumeID);
+      const { metaData, templateId } = await this.resumesService.getResume(
+        resumeID,
+        userId,
+      );
 
       const { template } = await this.findById(String(templateId));
       userMetaData = metaData;

@@ -14,6 +14,7 @@ import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
 import { UploadService } from 'src/upload/upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UserData } from 'src/decorator/request.decorator';
 
 @Controller('templates')
 export class TemplatesController {
@@ -70,11 +71,13 @@ export class TemplatesController {
 
   @Post('generate-pdf/:resumeID?')
   async generateResumePdf(
+    @UserData('userID') userId: string,
     @Param('resumeID') resumeID: string,
     @Body() resumeData: any,
     @Res() res: any,
   ): Promise<any> {
     const pdfBuffer = await this.templatesService.generateResumePdf({
+      userId,
       resumeID,
       resumeData,
     });

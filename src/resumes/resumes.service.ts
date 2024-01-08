@@ -1,5 +1,6 @@
 import { CreateResumeDto } from './dto/create-resume.dto';
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException,
@@ -27,27 +28,34 @@ export class ResumesService {
     return createdResume.save();
   }
 
-  async update(id: string, updateResumeDto: UpdateResumeDto): Promise<Resume> {
-    if (!isValidObjectId(id)) {
-      throw new NotFoundException(`Invalid ID format: ${id}`);
+  async update(
+    id: string,
+    userId: string,
+    updateResumeDto: UpdateResumeDto,
+  ): Promise<Resume> {
+    if (!isValidObjectId(id) || !isValidObjectId(userId)) {
+      throw new BadRequestException('Invalid data');
     }
     const updatedResume = await this.resumeModel
-      .findByIdAndUpdate(id, updateResumeDto, { new: true })
+      .findOneAndUpdate({ _id: id, userId }, updateResumeDto, { new: true })
       .exec();
 
     if (!updatedResume) {
-      throw new NotFoundException(`Template with ID: ${id} not found`);
+      throw new NotFoundException(`Resume not found`);
     }
     return updatedResume;
   }
 
-  async findById(id: string): Promise<Resume> {
-    if (!isValidObjectId(id)) {
-      throw new NotFoundException(`Invalid ID format: ${id}`);
+  async getResume(id: string, userId: string): Promise<Resume> {
+    if (!isValidObjectId(id) || !isValidObjectId(userId)) {
+      throw new BadRequestException('Invalid data');
     }
-    const resume = await this.resumeModel.findById(id).exec();
+    const resume = await this.resumeModel
+      .findOne({ _id: id, userId: userId })
+      .exec();
+
     if (!resume) {
-      throw new NotFoundException(`Resume with ID: ${id} not found`);
+      throw new NotFoundException(`Resume Not found`);
     }
     return resume;
   }
