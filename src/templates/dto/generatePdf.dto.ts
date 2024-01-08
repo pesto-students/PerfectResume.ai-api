@@ -22,6 +22,9 @@ export class GeneratePdfDto {
   @IsString()
   resumeID?: string;
 
+  @IsString()
+  userId?: string;
+
   @IsObject()
   @ValidateNested()
   @Type(() => ResumeDataDto)

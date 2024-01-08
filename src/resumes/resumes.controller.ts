@@ -45,7 +45,11 @@ export class ResumesController {
 
   @Put(':id')
   @UseInterceptors(FileInterceptor('image'))
-  async update(@Param('id') id: string, @Req() req): Promise<any> {
+  async update(
+    @UserData('userID') userId: string,
+    @Param('id') id: string,
+    @Req() req,
+  ): Promise<any> {
     // Accessing files from the request
     let url = null;
     const file: Express.Multer.File = req.file;
@@ -60,12 +64,15 @@ export class ResumesController {
       updateResumeDto['thumbnail'] = url;
     }
 
-    return this.resumesService.update(id, updateResumeDto);
+    return this.resumesService.update(id, userId, updateResumeDto);
   }
 
   @Get(':id')
-  findById(@Param('id') id: string): Promise<any> {
-    return this.resumesService.findById(id);
+  getResume(
+    @UserData('userID') userId: string,
+    @Param('id') id: string,
+  ): Promise<any> {
+    return this.resumesService.getResume(id, userId);
   }
 
   @Get('user/all')
