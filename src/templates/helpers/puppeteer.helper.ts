@@ -54,6 +54,7 @@ export class PuppeteerHelper {
 
   async generatePDF(template: object, metaData: object) {
     const htmlString = await this.generateHtml.build(template, metaData);
+    console.log('html: ', htmlString);
     console.time('page');
     const page = await this.loadPage();
     console.timeEnd('page');
@@ -67,6 +68,27 @@ export class PuppeteerHelper {
       format: 'A4',
       printBackground: true,
       scale: 1.2,
+    });
+
+    await page.close();
+    await this.browser.close();
+    return pdf;
+  }
+
+  async generatePdfFromHTML(html: string) {
+    const htmlString = html;
+    console.log('html: ', htmlString);
+    const page = await this.loadPage();
+    await page.setContent(htmlString, { waitUntil: 'networkidle0' });
+    // Inject CSS
+    await page.addStyleTag({
+      content: this.cssContent,
+    });
+
+    const pdf = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      scale: 1,
     });
 
     await page.close();

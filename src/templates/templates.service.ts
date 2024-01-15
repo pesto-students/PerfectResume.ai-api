@@ -93,4 +93,15 @@ export class TemplatesService {
     // fs.writeFileSync(filepath, pdf);
     return pdf;
   }
+
+  async generateHtmlToPdf({ userId, html }: { userId: string; html: string }) {
+    if (!(html && userId)) {
+      throw new BadRequestException(
+        'Either resumeID or template data must be provided.',
+      );
+    }
+
+    const pdf = await this.puppeteerHelper.generatePdfFromHTML(html);
+    return pdf;
+  }
 }

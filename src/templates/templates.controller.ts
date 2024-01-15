@@ -88,4 +88,22 @@ export class TemplatesController {
     // Send the PDF buffer
     res.send(pdfBuffer);
   }
+
+  @Post('generate-html-pdf')
+  async generateHtmlToPdf(
+    @UserData('userID') userId: string,
+    @Body() resumeData: any,
+    @Res() res: any,
+  ): Promise<any> {
+    const pdfBuffer = await this.templatesService.generateHtmlToPdf({
+      userId,
+      html: resumeData.html,
+    });
+    // Set the correct headers to indicate content type and disposition (as an attachment)
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
+
+    // Send the PDF buffer
+    res.send(pdfBuffer);
+  }
 }
